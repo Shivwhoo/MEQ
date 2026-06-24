@@ -1,25 +1,45 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f0ebf8;
-  --foreground: #202124;
-  --form-purple: #673ab7;
-  --form-card-bg: #ffffff;
-  --form-border: #dadce0;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --accent: #6366f1;
 }
 
 body {
-  background-color: var(--background);
+  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #09090b 70%);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
-/* Custom progress bar styles to fit Google Forms aesthetic */
-.sticky-progress {
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+/* Custom premium glow effects */
+.glow-card {
+  background: rgba(15, 15, 20, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glow-card:hover {
+  border-color: rgba(99, 102, 241, 0.25);
+  box-shadow: 0 10px 40px 0 rgba(99, 102, 241, 0.08);
+}
+
+.glow-text-neon {
+  text-shadow: 0 0 10px rgba(99, 102, 241, 0.5), 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.glow-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  transition: all 0.2s ease-in-out;
+}
+
+.glow-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
 }

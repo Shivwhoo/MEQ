@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useTransition } from 'react';
-import { verifyAdminPassword, getAdminData, getLeaderboardData } from '@/actions/admin';
+import { verifyAdminPassword, getAdminData, getLeaderboardData, deleteSubmission } from '@/actions/admin';
 import { 
   Users, 
   Trophy, 
@@ -12,7 +12,8 @@ import {
   ArrowRight, 
   Loader2, 
   AlertCircle,
-  Clock
+  Clock,
+  Trash2
 } from 'lucide-react';
 
 interface SubmissionRow {
@@ -107,6 +108,21 @@ export default function AdminPage() {
       const res = await getLeaderboardData(pass);
       if (res.success && res.leaderboard) {
         setLeaderboard(res.leaderboard);
+      }
+    });
+  };
+
+  const handleDelete = (id: string) => {
+    if (!window.confirm('Are you sure you want to delete this participant submission?')) {
+      return;
+    }
+    startTransition(async () => {
+      const res = await deleteSubmission(password, id);
+      if (res.success) {
+        setSubmissions((prev) => prev.filter((s) => s._id !== id));
+        fetchLeaderboard(password);
+      } else {
+        alert(res.error || 'Failed to delete submission.');
       }
     });
   };
@@ -372,6 +388,7 @@ export default function AdminPage() {
                       <th className="p-3 text-center">Score</th>
                       <th className="p-3">Classification</th>
                       <th className="p-3 text-right">Timestamp</th>
+                      <th className="p-3 text-center w-16">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-zinc-900/60 text-zinc-300">
@@ -398,6 +415,17 @@ export default function AdminPage() {
                             <Clock className="h-3 w-3 text-indigo-400/70" />
                             {new Date(sub.submittedAt).toLocaleDateString()} {new Date(sub.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </span>
+                        </td>
+                        <td className="p-3 text-center">
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(sub._id)}
+                            disabled={isPending}
+                            className="p-1 text-zinc-500 hover:text-rose-400 transition-colors disabled:opacity-50 cursor-pointer"
+                            title="Delete Submission"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
                         </td>
                       </tr>
                     ))}

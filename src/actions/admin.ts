@@ -104,3 +104,22 @@ export async function getLeaderboardData(password: string) {
     return { success: false, error: msg };
   }
 }
+
+export async function deleteSubmission(password: string, id: string) {
+  if (!checkPassword(password)) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    await connectToDatabase();
+    const result = await Submission.findByIdAndDelete(id);
+    if (!result) {
+      return { success: false, error: 'Submission not found or already deleted.' };
+    }
+    return { success: true };
+  } catch (error) {
+    console.error('Error deleting submission:', error);
+    const msg = error instanceof Error ? error.message : 'Database error';
+    return { success: false, error: msg };
+  }
+}
